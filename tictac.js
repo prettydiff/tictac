@@ -56,6 +56,26 @@ repl.start({
         if ((/\d,\d/).test(data) === true) {
             if (pos[cell[0]][cell[1]] === "") {
                 pos[cell[0]][cell[1]] = "x";
+                if (pos[0][cell[1]] === "x" && pos[1][cell[1]] === "x" && pos[2][cell[1]] === "x") {
+                    board();
+                    console.log("You win on column " + (cell[1] + 1));
+                    process.exit(0);
+                }
+                if (pos[cell[0]][0] === "x" && pos[cell[0]][1] === "x" && pos[cell[0]][2] === "x") {
+                    board();
+                    console.log("You win on row " + (cell[0] + 1));
+                    process.exit(0);
+                }
+                if (pos[1][1] === "x" && ((pos[0][0] === "x" && pos[2][2] === "x") || (pos[0][2] === "x" && pos[2][0] === "x"))) {
+                    board();
+                    console.log("You win on column " + (cell[1] + 1));
+                    process.exit(0);
+                }
+                if (pos.toString().split("x").length === 6) {
+                    board();
+                    console.log("Game over, nobody wins :(");
+                    process.exit(0);
+                }
                 (function () {
                     var b = 0,
                         c = 0;
@@ -184,18 +204,26 @@ repl.start({
                                 pos[cell[0]][ce] = "o";
                             } else {
                                 b = 0;
-                                c = 0;
                                 do {
+                                    c = 0;
                                     do {
                                         if (pos[b][c] === "") {
                                             pos[b][c] = "o";
                                             done      = true;
                                             break;
                                         }
+                                        if (pos[c][b] === "") {
+                                            pos[c][b] = "o";
+                                            done      = true;
+                                            break;
+                                        }
                                         c = c + 1;
                                     } while (c < 3);
+                                    if (done === true) {
+                                        break;
+                                    }
                                     b = b + 1;
-                                } while (b < 3 && done === false);
+                                } while (b < 3);
                             }
                         }
                     }
